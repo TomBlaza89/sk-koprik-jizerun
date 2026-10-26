@@ -31,4 +31,5 @@ Pro každý úsek:
 ## Poznámky
 
 - Mapa je orientační: úseky vedou přímkou mezi stanovišti.
-- Na GitHub Pages si každý mění tempa jen pro sebe a po obnovení stránky se vrátí výchozí hodnoty. Sdílené ukládání pro celý tým funguje jen ve verzi na claude.ai.
+- Stránka vždy začíná od odhadovaných temp. Každý si je může upravit a zkoušet, ale úpravy se nikam neukládají. Po novém otevření stránky (nebo tlačítkem „Vrátit odhady“) se vrátí výchozí hodnoty.
+- Stránka je responzivní a funguje na počítači, tabletu i mobilu.
