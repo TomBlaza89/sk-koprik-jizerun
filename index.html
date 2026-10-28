@@ -111,7 +111,7 @@ svg text{font-family:var(--body);fill:var(--fg)}
 .cres .rv{font:800 34px/1 var(--display);color:var(--lv);white-space:nowrap;font-variant-numeric:tabular-nums}
 .cres .rt{display:grid;gap:2px;min-width:0}
 .cres .rt b{font-weight:600}
-.cres .rt span{font:400 12px var(--mono);color:var(--muted)}
+.cres .rt span{font:400 12px var(--mono);color:var(--muted)}.cres .rt span b{color:var(--fg);font-weight:600}
 @media (max-width:520px){.cres{flex-direction:column;align-items:flex-start;gap:6px}}
 .cinfo{display:flex;flex-wrap:wrap;gap:4px 20px;font:400 13px var(--mono);color:var(--muted)}
 .cinfo b{color:var(--fg);font-weight:500}
@@ -367,8 +367,8 @@ const TYPN={fuel:"benzinka",pub:"hospoda",bar:"bar",restaurant:"restaurace",fast
 const cOn={f:true,h:true,r:true,o:true};
 let cSel=0,cHl=null;
 const ccol=k=>`var(--c-${k})`;
-const CBUF=10;
-function cRes(x){return Math.round(x.b-x.a-CARD.m[x.i][1]-CBUF)}
+const CBUF=10,CEARLY=15;
+function cRes(x){return Math.round(x.b-x.a-CARD.m[x.i][1]-CBUF-CEARLY)}
 function cLvl(r){return r>=40?["o","stihnete jídlo"]:r>=15?["f","stihnete kafe"]:r>=0?["h","jen krátká zastávka"]:["r","nestíháte, jeďte rovnou"]}
 function cPick(c){$("cpick").innerHTML=c.map(x=>{const r=cRes(x),[lv]=cLvl(r);return `<button type="button" style="--c:${col(x.who)}" aria-pressed="${cSel===x.i}" data-i="${x.i}" title="${x.from} → ${x.to} (${x.who}), rezerva ${r} min"><span class="pn">${x.i+1}</span><span class="pr" style="color:${ccol(lv)}">${r>0?"+":""}${r}′</span></button>`}).join("");
   $("cpick").querySelectorAll("button").forEach(b=>b.onclick=()=>{cSel=+b.dataset.i;sel=cSel;cHl=null;render()})}
@@ -386,7 +386,7 @@ function carmap(c){
   const rr=cRes(x),[lv,lt]=cLvl(rr);
   $("cinfo").innerHTML=`<span>autem <b>${km(ckm)} km</b> · cca <b>${cmin} min</b></span><span>běží <b style="color:${col(x.who)}">${x.who}</b> ${fmt(x.a)}–${fmt(x.b)}</span>${next?`<span>na předávce čeká <b style="color:${col(next.who)}">${next.who}</b></span>`:`<span><b>cíl závodu</b></span>`}`;
   $("cres").style.setProperty("--lv",ccol(lv));
-  $("cres").innerHTML=`<div class="rv">${rr>0?"+":""}${rr} min</div><div class="rt"><b>Rezerva na zastávku · ${lt}</b><span>běh ${x.b-x.a<60?Math.round(x.b-x.a)+" min":dur(x.b-x.a)} − auto ${cmin} min − ${CBUF} min na parkování a přesun na předávku${rr>0?` · vyrazit nejpozději v ${fmt(x.b-cmin-CBUF)}`:""}</span></div>`;
+  $("cres").innerHTML=`<div class="rv">${rr>0?"+":""}${rr} min</div><div class="rt"><b>Rezerva na zastávku · ${lt}</b><span>běh ${x.b-x.a<60?Math.round(x.b-x.a)+" min":dur(x.b-x.a)} − auto ${cmin} min − ${CBUF} min parkování a přesun − ${CEARLY} min být na předávce dřív · na místě nejpozději v <b>${fmt(x.b-CEARLY)}</b>${rr>0?` · ze zastávky vyrazit nejpozději v <b>${fmt(x.b-CEARLY-CBUF-cmin)}</b>`:""}</span></div>`;
   /* mapa */
   const W=Math.max(320,Math.min(900,$("cmap").clientWidth||760)),pad=W<500?34:46,k=Math.cos(50.5*Math.PI/180);
   let lo0=1e9,lo1=-1e9,la0=1e9,la1=-1e9;g0.forEach(p=>{lo0=Math.min(lo0,p[0]);lo1=Math.max(lo1,p[0]);la0=Math.min(la0,p[1]);la1=Math.max(la1,p[1])});
