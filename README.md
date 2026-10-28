@@ -37,3 +37,7 @@ Pro každý úsek:
 - Mapa je orientační: úseky vedou přímkou mezi stanovišti.
 - Stránka vždy začíná od odhadovaných temp. Každý si je může upravit a zkoušet, ale úpravy se nikam neukládají. Po novém otevření stránky (nebo tlačítkem „Vrátit odhady“) se vrátí výchozí hodnoty.
 - Stránka je responzivní a funguje na počítači, tabletu i mobilu.
+
+## Ikona na ploše
+
+Při přidání na plochu iPhonu (Sdílet → Přidat na plochu) se použije logo z `apple-touch-icon.png`, v prohlížeči `favicon.png`.
