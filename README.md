@@ -41,3 +41,7 @@ Pro každý úsek:
 ## Ikona na ploše
 
 Při přidání na plochu iPhonu (Sdílet → Přidat na plochu) se použije logo z `apple-touch-icon.png`, v prohlížeči `favicon.png`.
+
+## Offline režim
+
+Stránka má service worker (`sw.js`). Po prvním otevření se uloží do telefonu a z ikony na ploše se otevře i bez signálu. Když je signál, stáhne se vždy aktuální verze (při slabém signálu se po 4 s použije uložená). Odkazy na Google Mapy a mapy.com offline nefungují.

@@ -125,10 +125,12 @@ svg text{font-family:var(--body);fill:var(--fg)}
 .cempty{padding:12px 2px;color:var(--muted)}
 .cbtn{font:500 13px var(--mono);color:var(--river);text-decoration:none}
 .cbtn:hover{text-decoration:underline}
+.offline{position:sticky;top:0;z-index:5;background:var(--fg);color:var(--surface);font:500 13px var(--mono);text-align:center;padding:6px 12px;border-radius:0 0 8px 8px}
 footer{font-size:12px;color:var(--muted)}
 footer a{color:var(--river)}
 </style>
 
+<div class="offline" id="offline" hidden>Jsi offline · zobrazuji uloženou verzi, odkazy na mapy nepůjdou</div>
 <div class="wrap">
   <header class="hero">
     <div class="brand">
@@ -401,6 +403,9 @@ $("reset").onclick=resetAll;
 ["start","hills","kDn"].forEach(id=>$(id).addEventListener(id==="hills"?"change":"input",render));
 buildTeam();render();
 let rsT;addEventListener("resize",()=>{clearTimeout(rsT);rsT=setTimeout(()=>carmap(calc()),150)});
+/* offline režim */
+const offU=()=>{$("offline").hidden=navigator.onLine};addEventListener("online",offU);addEventListener("offline",offU);offU();
+if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
 
 </body></html>
