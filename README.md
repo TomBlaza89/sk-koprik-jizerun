@@ -9,7 +9,7 @@ Stránka `index.html` obsahuje:
 - zjednodušenou mapu trasy,
 - přehled úseků a kdo kolik běží, u každého úseku s odkazem na doporučenou cestu autem (mapy.com),
 - časovou osu závodu,
-- panel **Cesty autem a zastávky**: mapku cesty autem pro každý úsek s benzinkami, hospodami, restauracemi a obchody do 150 m od silnice, pruh podle kilometrů a seznam s odkazy na mapu.
+- panel **Cesty autem a zastávky**: mapku cesty autem pro každý úsek s benzinkami, hospodami, restauracemi a obchody do 150 m od silnice, pruh podle kilometrů a seznam s odkazy na Google Mapy.
 
 ## Odkud jsou data
 

@@ -367,7 +367,7 @@ function carmap(c){
   $("cstrip").innerHTML=`<svg viewBox="0 0 ${SW} ${SH}" role="img" aria-label="Zastávky podle kilometru">${h}</svg>`;
   /* seznam */
   $("clist").innerHTML=pois.length?pois.map(p=>`<div class="cpoi ${cHl===p.no?"hl":""}" data-no="${p.no}"><span class="dot" style="background:${ccol(p.k)}">${p.no}</span><span class="nm">${p.n||TYPN[p.t][0].toUpperCase()+TYPN[p.t].slice(1)}</span><span class="k">km ${km(p.km)}</span>
-    <span class="sub">${TYPN[p.t]}${p.oh?" · "+p.oh:""} · <a href="https://mapy.com/fnc/v1/showmap?mapset=basic&center=${p.lo},${p.la}&zoom=17&marker=true" target="_blank" rel="noopener">mapa ↗</a></span></div>`).join(""):`<div class="cempty">Na téhle cestě nejsou žádné zastávky vybraného typu.</div>`;
+    <span class="sub">${TYPN[p.t]}${p.oh?" · "+p.oh:""} · <a href="${p.n?`https://www.google.com/maps/search/${encodeURIComponent(p.n)}/@${p.la},${p.lo},18z`:`https://www.google.com/maps/search/?api=1&query=${p.la},${p.lo}`}" target="_blank" rel="noopener">Google Mapy ↗</a></span></div>`).join(""):`<div class="cempty">Na téhle cestě nejsou žádné zastávky vybraného typu.</div>`;
   document.querySelectorAll("#cmap [data-no],#cstrip [data-no],#clist .cpoi").forEach(e=>e.onclick=ev=>{if(ev.target.closest("a"))return;const n=+e.dataset.no;cHl=cHl===n?null:n;render();
     if(cHl!==null&&!e.classList.contains("cpoi")){const r=document.querySelector(`#clist .cpoi[data-no="${cHl}"]`);r&&r.scrollIntoView({block:"nearest"})}});
 }
