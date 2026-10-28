@@ -61,6 +61,8 @@ svg text{font-family:var(--body);fill:var(--fg)}
 .leg.sel{background:color-mix(in srgb,var(--river) 10%,transparent)}
 .num{font:800 22px var(--display);color:var(--muted);text-align:center}
 .route{font-weight:600}
+.car{display:inline-block;margin-top:4px;font:500 12px var(--mono);color:var(--river);text-decoration:none}
+.car:hover{text-decoration:underline}
 .meta{font:400 12px var(--mono);color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 12px}
 .who{font-weight:600;font-size:13px}
 .times{text-align:right;font:500 14px var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -145,6 +147,7 @@ footer a{color:var(--river)}
   <div class="grid">
     <section class="panel">
       <h2>Úseky</h2>
+      <p class="map-note" style="margin:0 0 6px">U každého úseku je odkaz na doporučenou cestu autem z <a href="https://www.jizerun.cz/trasa/" target="_blank" rel="noopener">jizerun.cz</a>.</p>
       <div class="legs" id="legs"></div>
     </section>
     <section class="panel" style="align-content:start">
@@ -166,6 +169,7 @@ footer a{color:var(--river)}
 const R={Cýra:"--cyra",Irča:"--irca",Klára:"--klara",Tom:"--tom",Mára:"--mara"};
 const S=[["Čelákovice",50.160,14.750],["Sojovice",50.222,14.738],["Benátky n/J",50.290,14.824],["Krnsko",50.386,14.861],["Bradlec",50.440,14.913],["Klášter",50.524,14.947],["Svijany",50.574,15.059],["Turnov",50.587,15.157],["Malá Skála",50.645,15.195],["Bozkov",50.663,15.330],["Vysoké n/J",50.686,15.402],["Kořenov",50.762,15.367],["Jizerka",50.819,15.336],["Smědava",50.840,15.263],["Josefův Důl",50.783,15.231],["Smržovka",50.738,15.245]];
 const L=[[9.2,2,"Cýra",15,15],[12.3,3,"Irča",28,13],[11.5,4,"Klára",31,30],[10.4,5,"Tom",100,0],[14.7,7,"Mára",65,45],[13.4,6,"Cýra",122,76],[11.2,2,"Irča",15,38],[9.7,1,"Klára",19,0],[13.7,6,"Tom",256,30],[9.9,8,"Mára",308,105],[8.6,8,"Cýra",315,230],[9.7,7,"Irča",292,160],[12.6,6,"Klára",112,171],[10.3,5,"Tom",140,413],[7.1,5,"Mára",197,131]];
+const CAR=["ceterocuha", "defezujudu", "mutobaseje", "gebukedomu", "hogusofola", "hohabukeca", "ceremapoku", "jovazasogo", "fuvutazuce", "hehupufuga", "mavuluhubu", "ledupopogo", "bubukurose", "hugopemene", "davepufovo"];
 const IDS={Cýra:"cyra",Irča:"irca",Klára:"klara",Tom:"tom",Mára:"mara"};
 const DEF={Cýra:"5:05",Irča:"6:15",Klára:"6:25",Tom:"5:05",Mára:"5:25"};
 const DEFUP={Cýra:"3.5",Irča:"7",Klára:"7",Tom:"5",Mára:"5"};
@@ -243,8 +247,10 @@ function legs(c){
     <div class="num">${x.i+1}</div>
     <div style="min-width:0"><div class="route">${x.from} → ${x.to}</div>
       <div class="meta"><span class="who" style="color:${col(x.who)}">${x.who}</span><span>${km(x.km)} km</span><span>↑${x.up} ↓${x.dn} m</span><span>${mmss(x.p)}/km</span>
-      <span class="diff" title="náročnost ${x.d}/10">${Array.from({length:10},(_,j)=>`<span class="${j<x.d?"on":""}"></span>`).join("")}</span></div></div>
+      <span class="diff" title="náročnost ${x.d}/10">${Array.from({length:10},(_,j)=>`<span class="${j<x.d?"on":""}"></span>`).join("")}</span></div>
+      <a class="car" href="https://mapy.com/s/${CAR[x.i]}" target="_blank" rel="noopener">Cesta autem ↗</a></div>
     <div class="times">${fmt(x.a)}–${fmt(x.b)}<small>${dur(x.b-x.a)}</small></div></div>`).join("");
+  $("legs").querySelectorAll(".car").forEach(a=>a.onclick=e=>e.stopPropagation());
   $("legs").querySelectorAll(".leg").forEach(e=>e.onclick=()=>{sel=sel===+e.dataset.i?null:+e.dataset.i;render()});
 }
 

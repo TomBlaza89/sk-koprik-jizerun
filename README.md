@@ -7,12 +7,13 @@ Stránka `index.html` obsahuje:
 - odhad doběhu do cíle podle startovního času,
 - tabulku temp týmu (tempo po rovině + minuty navíc za stoupání),
 - zjednodušenou mapu trasy,
-- přehled úseků a kdo kolik běží,
+- přehled úseků a kdo kolik běží, u každého úseku s odkazem na doporučenou cestu autem (mapy.com),
 - časovou osu závodu.
 
 ## Odkud jsou data
 
 - **Délky a náročnost úseků:** [jizerun.cz/trasa](https://www.jizerun.cz/trasa/)
+- **Cesty autem:** odkazy „Cesta autem na mapy.com“ ze stránek jednotlivých úseků na jizerun.cz
 - **Převýšení úseků:** tabulka `Jizerun_komplet.xlsx`, u úseku 4 podle Tomovy trasy na [Mapy.com](https://mapy.com/s/kefecudobe)
 - **Výchozí tempa:** odhady z tréninků v Garminu a Stravě (srpen–říjen 2026)
 
