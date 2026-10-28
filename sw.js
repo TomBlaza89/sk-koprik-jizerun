@@ -1,5 +1,5 @@
 /* SK Kopřík – offline režim. Stránka: síť první (s časovým limitem), jinak uložená verze. Fonty a ikony: uložené první. */
-const CACHE = "koprik-v1";
+const CACHE = "koprik-v2";
 const CORE = ["./", "./index.html", "./apple-touch-icon.png", "./favicon.png"];
 
 self.addEventListener("install", e => {
@@ -20,7 +20,7 @@ self.addEventListener("fetch", e => {
     e.respondWith((async () => {
       const c = await caches.open(CACHE);
       try {
-        const res = await Promise.race([fetch(req), timeout(4000)]);
+        const res = await Promise.race([fetch(req.url, { cache: "no-cache" }), timeout(4000)]);
         if (res && res.ok) c.put("./index.html", res.clone());
         return res;
       } catch (err) {
