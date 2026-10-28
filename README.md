@@ -10,6 +10,8 @@ Stránka `index.html` obsahuje:
 - přehled úseků a kdo kolik běží, u každého úseku s odkazem na doporučenou cestu autem (mapy.com),
 - časovou osu závodu,
 - panel **Cesty autem a zastávky**: mapku cesty autem pro každý úsek s benzinkami, hospodami, restauracemi a obchody do 150 m od silnice, pruh podle kilometrů a seznam s odkazy na Google Mapy.
+- **časovou rezervu auta** u každého úseku: čas běžce − jízda autem − 15 min (být na předávce dřív, včetně parkování); přepočítává se podle temp a ukazuje, kdy nejpozději vyrazit,
+- přepínač světlého a tmavého režimu (vpravo nahoře).
 
 ## Odkud jsou data
 
