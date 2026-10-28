@@ -102,6 +102,17 @@ svg text{font-family:var(--body);fill:var(--fg)}
 .cpick{display:flex;flex-wrap:wrap;gap:4px}
 .cpick button{font:600 13px var(--mono);min-width:34px;height:32px;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:6px;cursor:pointer;border-bottom:3px solid var(--c)}
 .cpick button[aria-pressed="true"]{background:var(--fg);color:var(--surface);border-color:var(--fg);border-bottom-color:var(--c)}
+.cpick{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:4px}
+.cpick button{height:auto;padding:5px 2px 4px;display:grid;gap:1px;justify-items:center}
+.cpick .pn{font:600 14px var(--mono)}
+.cpick .pr{font:600 11px var(--mono)}
+.cpick button[aria-pressed="true"] .pr{filter:brightness(1.4)}
+.cres{display:flex;gap:14px;align-items:center;border:1px solid var(--line);border-left:5px solid var(--lv);border-radius:8px;padding:10px 14px;background:color-mix(in srgb,var(--lv) 8%,var(--surface))}
+.cres .rv{font:800 34px/1 var(--display);color:var(--lv);white-space:nowrap;font-variant-numeric:tabular-nums}
+.cres .rt{display:grid;gap:2px;min-width:0}
+.cres .rt b{font-weight:600}
+.cres .rt span{font:400 12px var(--mono);color:var(--muted)}
+@media (max-width:520px){.cres{flex-direction:column;align-items:flex-start;gap:6px}}
 .cinfo{display:flex;flex-wrap:wrap;gap:4px 20px;font:400 13px var(--mono);color:var(--muted)}
 .cinfo b{color:var(--fg);font-weight:500}
 .ctitle{font:800 24px var(--display);letter-spacing:.01em}
@@ -227,10 +238,11 @@ footer a{color:var(--river)}
   </section>
 
   <section class="panel" id="carpanel">
-    <div class="phead"><h2>Cesty autem a zastávky</h2><span class="sync">vyber úsek</span></div>
+    <div class="phead"><h2>Cesty autem a zastávky</h2><span class="sync">vyber úsek · pod číslem je rezerva v minutách</span></div>
     <div class="cpick" id="cpick" role="group" aria-label="Vybrat úsek"></div>
     <div class="phead"><div class="ctitle" id="ctitle"></div><a class="cbtn" id="clink" target="_blank" rel="noopener">Otevřít trasu na mapy.com ↗</a></div>
     <div class="cinfo" id="cinfo"></div>
+    <div class="cres" id="cres"></div>
     <div class="cfilt" id="cfilt" role="group" aria-label="Typy zastávek"></div>
     <div class="cgrid">
       <div style="display:grid;gap:10px;min-width:0">
@@ -355,7 +367,10 @@ const TYPN={fuel:"benzinka",pub:"hospoda",bar:"bar",restaurant:"restaurace",fast
 const cOn={f:true,h:true,r:true,o:true};
 let cSel=0,cHl=null;
 const ccol=k=>`var(--c-${k})`;
-function cPick(c){$("cpick").innerHTML=c.map(x=>`<button type="button" style="--c:${col(x.who)}" aria-pressed="${cSel===x.i}" data-i="${x.i}" title="${x.from} → ${x.to} (${x.who})">${x.i+1}</button>`).join("");
+const CBUF=10;
+function cRes(x){return Math.round(x.b-x.a-CARD.m[x.i][1]-CBUF)}
+function cLvl(r){return r>=40?["o","stihnete jídlo"]:r>=15?["f","stihnete kafe"]:r>=0?["h","jen krátká zastávka"]:["r","nestíháte, jeďte rovnou"]}
+function cPick(c){$("cpick").innerHTML=c.map(x=>{const r=cRes(x),[lv]=cLvl(r);return `<button type="button" style="--c:${col(x.who)}" aria-pressed="${cSel===x.i}" data-i="${x.i}" title="${x.from} → ${x.to} (${x.who}), rezerva ${r} min"><span class="pn">${x.i+1}</span><span class="pr" style="color:${ccol(lv)}">${r>0?"+":""}${r}′</span></button>`}).join("");
   $("cpick").querySelectorAll("button").forEach(b=>b.onclick=()=>{cSel=+b.dataset.i;sel=cSel;cHl=null;render()})}
 function cFilt(){$("cfilt").innerHTML=Object.keys(CATN).map(k=>`<button type="button" class="chip" aria-pressed="${cOn[k]}" data-k="${k}"><i style="background:${ccol(k)}"></i>${CATN[k]}</button>`).join("");
   $("cfilt").querySelectorAll("button").forEach(b=>b.onclick=()=>{cOn[b.dataset.k]=!cOn[b.dataset.k];render()})}
@@ -368,8 +383,10 @@ function carmap(c){
   $("ctitle").textContent=`${x.i+1}. ${x.from} → ${x.to}`;
   $("clink").href="https://mapy.com/s/"+CAR[x.i];
   const next=c[x.i+1];
-  const spare=x.b-x.a-cmin;
-  $("cinfo").innerHTML=`<span>autem <b>${km(ckm)} km</b> · cca <b>${cmin} min</b></span><span>běží <b style="color:${col(x.who)}">${x.who}</b> ${fmt(x.a)}–${fmt(x.b)}</span>${next?`<span>na předávce čeká <b style="color:${col(next.who)}">${next.who}</b></span>`:`<span><b>cíl závodu</b></span>`}<span>čas na zastávku cca <b>${spare<=0?"žádný":spare<60?Math.round(spare)+" min":dur(spare)}</b></span>`;
+  const rr=cRes(x),[lv,lt]=cLvl(rr);
+  $("cinfo").innerHTML=`<span>autem <b>${km(ckm)} km</b> · cca <b>${cmin} min</b></span><span>běží <b style="color:${col(x.who)}">${x.who}</b> ${fmt(x.a)}–${fmt(x.b)}</span>${next?`<span>na předávce čeká <b style="color:${col(next.who)}">${next.who}</b></span>`:`<span><b>cíl závodu</b></span>`}`;
+  $("cres").style.setProperty("--lv",ccol(lv));
+  $("cres").innerHTML=`<div class="rv">${rr>0?"+":""}${rr} min</div><div class="rt"><b>Rezerva na zastávku · ${lt}</b><span>běh ${x.b-x.a<60?Math.round(x.b-x.a)+" min":dur(x.b-x.a)} − auto ${cmin} min − ${CBUF} min na parkování a přesun na předávku${rr>0?` · vyrazit nejpozději v ${fmt(x.b-cmin-CBUF)}`:""}</span></div>`;
   /* mapa */
   const W=Math.max(320,Math.min(900,$("cmap").clientWidth||760)),pad=W<500?34:46,k=Math.cos(50.5*Math.PI/180);
   let lo0=1e9,lo1=-1e9,la0=1e9,la1=-1e9;g0.forEach(p=>{lo0=Math.min(lo0,p[0]);lo1=Math.max(lo1,p[0]);la0=Math.min(la0,p[1]);la1=Math.max(la1,p[1])});
